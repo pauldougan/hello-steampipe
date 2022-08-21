@@ -1,26 +1,19 @@
-APP             := paas-dashboard
-
-apps:
-	cf apps
+SHELL                     := bash
+APP_NAME                  := hello-steampipe
+DOCKER_USER               := dougapd
 
 build:
-	docker build -t dougapd/paas-dashboard  .
+	docker build -t $(DOCKER_USER)/$(APP_NAME)
 
 docker-push:
-	docker push dougapd/paas-dashboard
-
-cf-push:
-	cf push
-
-logs:
-	cf logs --recent $(APP)
-
-delete:
-	cf delete -f $(APP) 
+	docker push $(DOCKER_USER)/$(APP_NAME)
 
 local:
-	docker run --rm -ti -p 8080:8080 dougapd/paas-dashboard dashboard --dashboard-port 8080 --browser=false --dashboard-listen network
+	docker run --rm -ti -p 8080:8080 $(DOCKER_USER)/$(APP_NAME) --dashboard-port 8080 --browser=false --dashboard-listen network
 
 local2:
-	docker run --rm -ti -p 8080:8080 dougapd/paas-dashboard
+	docker run --rm -ti -p 8080:8080 $(DOCKER_USER)/$(APP_NAME)
 
+deps:
+	brew install aws/tap/copilot-cli
+	brew install steampipe
