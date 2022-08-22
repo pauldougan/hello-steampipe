@@ -1,4 +1,4 @@
-# Deploy #1 with copilot cli
+# #1 Deploy hello-steampipe with AWS Copilot as a request driven web service
 
 ```
 copilot init  --app hello-steampipe \
