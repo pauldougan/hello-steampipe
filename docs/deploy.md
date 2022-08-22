@@ -3,10 +3,11 @@
 ```
 copilot init  --app hello-steampipe \
             	--name hello-steampipe \
-            	--type "Simple steampipe dashboard" \
+            	--type "Request-Driven Web Service" \
              	--dockerfile "./Dockerfile" \
             	--deploy
 ```
+17:24:28 - 
 
 ## Logs
 
