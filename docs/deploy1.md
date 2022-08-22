@@ -1,4 +1,4 @@
-# Deploy with copilot cli
+# Deploy #1 with copilot cli
 
 ```
 copilot init  --app hello-steampipe \
@@ -7,7 +7,8 @@ copilot init  --app hello-steampipe \
              	--dockerfile "./Dockerfile" \
             	--deploy
 ```
-17:24:28 - 
+
+17:24 - 17:43
 
 ## Logs
 
@@ -95,4 +96,15 @@ c583bf48ad90: Pushed
 8f7fbd0226af: Pushed
 f93c7a8d0b11: Pushed
 09ebdb357ed5: Pushed
+✔ Proposing infrastructure changes for stack hello-steampipe-test-hello-steampipe
+- Creating the infrastructure for stack hello-steampipe-test-hello-steampipe         [rollback complete]  [693.7s]
+  The following resource(s) failed to create: [Service]. Rollback reques
+  ted by user.
+  - An IAM Role for App Runner to use on your behalf to pull your image from ECR     [delete complete]    [21.6s]
+  - An IAM role to control permissions for the containers in your service            [delete complete]    [21.6s]
+  - An App Runner service to run and manage your containers                          [delete complete]    [14.0s]
+    Resource handler returned message: "null" (RequestToken: 68a711f1-9cf1
+    -f117-8095-b4cd3236ff8f, HandlerErrorCode: null)
+✘ deploy service hello-steampipe to environment test: deploy service: stack hello-steampipe-test-hello-steampipe did not complete successfully and exited with status ROLLBACK_COMPLETE
+make: *** [deploy] Error 1
 ```
