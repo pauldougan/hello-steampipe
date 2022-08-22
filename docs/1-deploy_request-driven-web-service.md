@@ -8,9 +8,11 @@ copilot init  --app hello-steampipe \
             	--deploy
 ```
 
-17:24 - 17:43
+
 
 ## Logs
+
+17:24 - 17:43
 
 ```
 Welcome to the Copilot CLI! We're going to walk you through some questions
