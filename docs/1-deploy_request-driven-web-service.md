@@ -1,7 +1,6 @@
 # #1 Deploy hello-steampipe with AWS Copilot as a request driven web service
 
-> this does not work because of lack of support for web sockets in apprunner
-
+> this does not work because of lack of support for web sockets in apprunner see https://github.com/aws/apprunner-roadmap/issues/13
 
 ```
 copilot init  --app hello-steampipe \
@@ -10,8 +9,6 @@ copilot init  --app hello-steampipe \
              	--dockerfile "./Dockerfile" \
             	--deploy
 ```
-
-
 
 ## Logs
 
