@@ -1,18 +1,25 @@
 SHELL                     := bash
 APP_NAME                  := hello-steampipe
+SERVICE_NAME              := dashboard
 DOCKER_USER               := dougapd
 
 
 build:
 	docker build -t $(DOCKER_USER)/$(APP_NAME)
 
-deploy-rqs:
+deploy-apprunner: Dockerfile
 	copilot init --app $(APP_NAME) \
-  	--name $(APP_NAME) \
+  	--name $(SERVICE_NAME) \
   	--type "Request-Driven Web Service" \
   	--dockerfile "./Dockerfile" \
   	--deploy
 
+deploy-ecsfargate: Dockerfile
+	copilot init --app $(APP_NAME) \
+  	--name $(SERVICE_NAME) \
+  	--type "Load Balanced Web Service" \
+  	--dockerfile "./Dockerfile" \
+  	--deploy
 
 delete:
 	copilot app delete
