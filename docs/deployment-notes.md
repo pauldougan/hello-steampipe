@@ -115,7 +115,7 @@ make: *** [deploy] Error 1
 
 # #2 Deploy to ECS/Fargate (Load Balanced Web Service)
 
-> 😊 this works
+> 😊 this works with the website at http://hello-Publi-1VEHI3R44LUA4-765409388.eu-west-1.elb.amazonaws.com
 
 - Ensure you are on the GDS VPN
 - Assume role into paas-experiments-admin
