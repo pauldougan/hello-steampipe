@@ -128,7 +128,7 @@ copilot init  --app hello-steampipe \
             	--deploy
 ```
 
-## logs
+## logs
 
 ```
 Welcome to the Copilot CLI! We're going to walk you through some questions
