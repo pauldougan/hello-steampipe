@@ -113,7 +113,7 @@ f93c7a8d0b11: Pushed
 make: *** [deploy] Error 1
 ```
 
-# #2 Deploy to ECS/Fargate (request driven web service)
+# #2 Deploy to ECS/Fargate (Load Balanced Web Service)
 
 > 😊 this works
 
