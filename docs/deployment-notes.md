@@ -1,6 +1,6 @@
 # #1 Deploy to Apprunner (request driven web service)
 
-> this does not work because of lack of support for web sockets in apprunner see https://github.com/aws/apprunner-roadmap/issues/13
+> 😭 this does not work because of lack of support for web sockets in apprunner see https://github.com/aws/apprunner-roadmap/issues/13
 
 - Ensure you are on the GDS VPN
 - Assume role into paas-experiments-admin
@@ -8,8 +8,7 @@
 ```
 copilot init  --app hello-steampipe \
             	--name hello-steampipe \
-            	--type "Request-Driven Web Service" \
-             	--dockerfile "./Dockerfile" \
+            	--type "Request-Driven Web Service"             	--dockerfile "./Dockerfile" \
             	--deploy
 ```
 
@@ -116,7 +115,7 @@ make: *** [deploy] Error 1
 
 # #2 Deploy to ECS/Fargate (request driven web service)
 
-> this works
+> 😊 this works
 
 - Ensure you are on the GDS VPN
 - Assume role into paas-experiments-admin
