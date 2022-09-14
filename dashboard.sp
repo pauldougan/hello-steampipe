@@ -1,5 +1,5 @@
 dashboard "dashboard-hello" {
-  title = "Hello steampipe on Cloud Foundry"
+  title = "Hello steampipe"
 
   container {
     title = "Orgs"
