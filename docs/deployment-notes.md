@@ -2,6 +2,9 @@
 
 > this does not work because of lack of support for web sockets in apprunner see https://github.com/aws/apprunner-roadmap/issues/13
 
+- Ensure you are on the GDS VPN
+- Assume role into paas-experiments-admin
+
 ```
 copilot init  --app hello-steampipe \
             	--name hello-steampipe \
@@ -110,3 +113,12 @@ f93c7a8d0b11: Pushed
 ✘ deploy service hello-steampipe to environment test: deploy service: stack hello-steampipe-test-hello-steampipe did not complete successfully and exited with status ROLLBACK_COMPLETE
 make: *** [deploy] Error 1
 ```
+
+# #2 Deploy to ECS/Fargate (request driven web service)
+
+> this works
+
+
+- Ensure you are on the GDS VPN
+- Assume role into paas-experiments-admin
+
