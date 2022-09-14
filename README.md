@@ -2,7 +2,7 @@
 
 ![](docs/screenshot.png)
 
-run a minimal [Steampipe](https://steampipe.io) dashboard on AWS using [AWS Copilot CLI](https://aws.github.io/copilot-cli/)
+run a minimal [Steampipe](https://steampipe.io) dashboard on AWS using [AWS Copilot CLI](https://aws.github.io/copilot-cli/) to explore our options for deployment
 
 # Deployment options
 
