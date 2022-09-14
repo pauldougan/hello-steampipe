@@ -122,3 +122,10 @@ make: *** [deploy] Error 1
 - Ensure you are on the GDS VPN
 - Assume role into paas-experiments-admin
 
+```
+copilot init  --app hello-steampipe \
+            	--name hello-steampipe \
+            	--type "Load Balanced Web Service" \
+             	--dockerfile "./Dockerfile" \
+            	--deploy
+```
