@@ -15,7 +15,7 @@ copilot init  --app hello-steampipe \
 
 ## Logs
 
-17:24 - 17:43
+19m elapsed
 
 ```
 Welcome to the Copilot CLI! We're going to walk you through some questions
@@ -118,7 +118,6 @@ make: *** [deploy] Error 1
 
 > this works
 
-
 - Ensure you are on the GDS VPN
 - Assume role into paas-experiments-admin
 
@@ -130,12 +129,9 @@ copilot init  --app hello-steampipe \
             	--deploy
 ```
 
+## logs
+
 ```
-copilot init --app hello-steampipe \
-  	--name hello-steampipe \
-  	--type "Load Balanced Web Service" \
-  	--dockerfile "./Dockerfile" \
-  	--deploy
 Welcome to the Copilot CLI! We're going to walk you through some questions
 to help you get set up with a containerized application on AWS. An application is a collection of
 containerized services that operate together.
