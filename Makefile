@@ -12,6 +12,7 @@ deploy-apprunner: Dockerfile
   	--name $(SERVICE_NAME) \
   	--type "Request-Driven Web Service" \
   	--dockerfile "./Dockerfile" \
+	--resource-tags department=GDS,team=PaaS-Team \ 
   	--deploy
 
 deploy-ecsfargate: Dockerfile
@@ -19,6 +20,7 @@ deploy-ecsfargate: Dockerfile
   	--name $(SERVICE_NAME) \
   	--type "Load Balanced Web Service" \
   	--dockerfile "./Dockerfile" \
+	--resource-tags department=GDS,team=PaaSTeam, owner=paul \ 
   	--deploy
 
 delete:
