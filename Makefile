@@ -5,23 +5,24 @@ DOCKER_USER               := dougapd
 
 
 build:
-	docker build -t $(DOCKER_USER)/$(APP_NAME)
+	docker build -t $(APP_NAME) .
 
-deploy-apprunner: Dockerfile
+init-apprunner: Dockerfile
 	copilot init --app $(APP_NAME) \
   	--name $(SERVICE_NAME) \
   	--type "Request-Driven Web Service" \
   	--dockerfile "./Dockerfile" \
-	--resource-tags department=GDS,team=PaaS-Team \ 
-  	--deploy
+	--resource-tags department=GDS,team=PaasTeam \ 
 
-deploy-ecsfargate: Dockerfile
+init-ecsfargate: Dockerfile
 	copilot init --app $(APP_NAME) \
   	--name $(SERVICE_NAME) \
   	--type "Load Balanced Web Service" \
   	--dockerfile "./Dockerfile" \
-	--resource-tags department=GDS,team=PaaSTeam, owner=paul \ 
-  	--deploy
+	--resource-tags department=GDS,team=PaasTeam, owner=paul \ 
+  	
+deploy:
+	copilot deploy
 
 delete:
 	copilot app delete
@@ -30,7 +31,7 @@ docker-push:
 	docker push $(DOCKER_USER)/$(APP_NAME)
 
 local:
-	docker run --rm -ti -p 8080:8080 $(DOCKER_USER)/$(APP_NAME)
+	docker run --rm -ti -p 8080:8080 $(APP_NAME)
 
 dashboard:
 	steampipe dashboard
