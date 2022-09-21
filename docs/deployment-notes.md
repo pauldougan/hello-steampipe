@@ -241,7 +241,8 @@ Recommended follow-up action:
   Visit 👉 https://aws.github.io/copilot-cli/community/get-involved/ to see how!
 
 ```
-#3 Deploy to ECS/Fargate (Backend Service)
+
+# 3 Deploy to ECS/Fargate (Backend Service)
 
 > 😊 this works with the website at http://dashboard.test.hello-steampipe.local:8080
 
@@ -257,7 +258,10 @@ Recommended follow-up action:
         --type "Backend Service" \
         --port 8080 \
         --dockerfile "./Dockerfile"
-\Welcome to the Copilot CLI! We're going to walk you through some questions
+```
+
+```
+Welcome to the Copilot CLI! We're going to walk you through some questions
 to help you get set up with a containerized application on AWS. An application is a collection of
 containerized services that operate together.
 
