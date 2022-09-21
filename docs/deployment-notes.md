@@ -241,3 +241,126 @@ Recommended follow-up action:
   Visit 👉 https://aws.github.io/copilot-cli/community/get-involved/ to see how!
 
 ```
+#3 Deploy to ECS/Fargate (Backend Service)
+
+> 😊 this works with the website at http://dashboard.test.hello-steampipe.local:8080
+
+- Ensure you are on the GDS VPN
+- Assume role into paas-experiments-admin
+
+## Logs
+
+```
+ copilot init \
+        --app hello-steampipe \
+        --name dashboard \
+        --type "Backend Service" \
+        --port 8080 \
+        --dockerfile "./Dockerfile"
+\Welcome to the Copilot CLI! We're going to walk you through some questions
+to help you get set up with a containerized application on AWS. An application is a collection of
+containerized services that operate together.
+
+Note: Looks like you're creating an application using credentials set by environment variables.
+Copilot will store your application metadata in this account.
+We recommend using credentials from named profiles. To learn more:
+https://aws.github.io/copilot-cli/docs/credentials/
+
+Ok great, we'll set up a Backend Service named dashboard in application hello-steampipe listening on port 8080.
+
+✔ Proposing infrastructure changes for stack hello-steampipe-infrastructure-roles
+- Creating the infrastructure for stack hello-steampipe-infrastructure-roles                    [create complete]  [55.6s]
+  - A StackSet admin role assumed by CloudFormation to manage regional stacks                   [create complete]  [22.1s]
+  - An IAM role assumed by the admin role to create ECR repositories, KMS keys, and S3 buckets  [create complete]  [21.6s]
+✔ The directory copilot will hold service manifests for application hello-steampipe.
+
+✔ Wrote the manifest for service dashboard at copilot/dashboard/manifest.yml
+Your manifest contains configurations like your container size and port (:8080).
+
+- Update regional resources with stack set "hello-steampipe-infrastructure"  [succeeded]  [0.0s]
+All right, you're all set for local development.
+Deploy: Yes
+
+✔ Wrote the manifest for environment test at copilot/environments/test/manifest.yml
+- Update regional resources with stack set "hello-steampipe-infrastructure"  [succeeded]  [0.0s]
+- Update regional resources with stack set "hello-steampipe-infrastructure"  [succeeded]        [133.1s]
+  - Update resources in region "eu-west-1"                                   [create complete]  [124.8s]
+    - ECR container image repository for "dashboard"                         [create complete]  [0.9s]
+    - KMS key to encrypt pipeline artifacts between stages                   [create complete]  [121.1s]
+    - S3 Bucket to store local artifacts                                     [create complete]  [4.1s]
+✔ Proposing infrastructure changes for the hello-steampipe-test environment.
+- Creating the infrastructure for the hello-steampipe-test environment.  [create complete]  [60.3s]
+  - An IAM Role for AWS CloudFormation to manage resources               [create complete]  [23.9s]
+  - An IAM Role to describe resources in your environment                [create complete]  [26.5s]
+✔ Provisioned bootstrap resources for environment test in region eu-west-1 under application hello-steampipe.
+✔ Provisioned bootstrap resources for environment test.
+✔ Proposing infrastructure changes for the hello-steampipe-test environment.
+- Creating the infrastructure for the hello-steampipe-test environment.       [update complete]  [75.1s]
+  - An ECS cluster to group your services                                     [create complete]  [9.7s]
+  - A security group to allow your containers to talk to each other           [create complete]  [0.0s]
+  - An Internet Gateway to connect to the public internet                     [create complete]  [15.0s]
+  - Private subnet 1 for resources with no internet access                    [create complete]  [5.6s]
+  - Private subnet 2 for resources with no internet access                    [create complete]  [1.7s]
+  - A custom route table that directs network traffic for the public subnets  [create complete]  [12.0s]
+  - Public subnet 1 for resources that can access the internet                [create complete]  [5.6s]
+  - Public subnet 2 for resources that can access the internet                [create complete]  [5.6s]
+  - A private DNS namespace for discovering services within the environment   [create complete]  [44.4s]
+  - A Virtual Private Cloud to control networking of your AWS resources       [create complete]  [11.3s]
+[+] Building 1.7s (12/12) FINISHED
+ => [internal] load build definition from Dockerfile                                                                                                                                                                                                                            0.0s
+ => => transferring dockerfile: 37B                                                                                                                                                                                                                                             0.0s
+ => [internal] load .dockerignore                                                                                                                                                                                                                                               0.0s
+ => => transferring context: 2B                                                                                                                                                                                                                                                 0.0s
+ => [internal] load metadata for docker.io/turbot/steampipe:latest                                                                                                                                                                                                              1.5s
+ => [auth] turbot/steampipe:pull token for registry-1.docker.io                                                                                                                                                                                                                 0.0s
+ => [1/6] FROM docker.io/turbot/steampipe@sha256:d6af10eda6b474057bb8f1fa7e917121e51312964011e34dd185f14253513778                                                                                                                                                               0.0s
+ => [internal] load build context                                                                                                                                                                                                                                               0.1s
+ => => transferring context: 148B                                                                                                                                                                                                                                               0.0s
+ => CACHED [2/6] RUN  steampipe plugin install steampipe csv                                                                                                                                                                                                                    0.0s
+ => CACHED [3/6] WORKDIR .                                                                                                                                                                                                                                                      0.0s
+ => CACHED [4/6] ADD *.sp .                                                                                                                                                                                                                                                     0.0s
+ => CACHED [5/6] ADD orgs.csv .                                                                                                                                                                                                                                                 0.0s
+ => CACHED [6/6] ADD config .                                                                                                                                                                                                                                                   0.0s
+ => exporting to image                                                                                                                                                                                                                                                          0.0s
+ => => exporting layers                                                                                                                                                                                                                                                         0.0s
+ => => writing image sha256:88c7b20ff9c5f130a064073b532d0872adab908707673d5b22307eed9ff956ac                                                                                                                                                                                    0.0s
+ => => naming to 994429068692.dkr.ecr.eu-west-1.amazonaws.com/hello-steampipe/dashboard                                                                                                                                                                                         0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Login Succeeded
+Using default tag: latest
+The push refers to repository [994429068692.dkr.ecr.eu-west-1.amazonaws.com/hello-steampipe/dashboard]
+4e19709e4671: Pushed
+fc30a76d35e9: Pushed
+0e5446274ed2: Pushed
+5f70bf18a086: Pushed
+543a7f596df4: Pushed
+44a6fdcd9c82: Pushed
+fdccade21c60: Pushed
+2ac0663b4116: Pushed
+ead9d532265e: Pushed
+1b14b8c80776: Pushed
+ce64e4adb993: Pushed
+aea393867bb1: Pushed
+b45078e74ec9: Pushed
+latest: digest: sha256:976ca899b57820f60b1da6490d1688d804eb172cd448f9b798c495e087fbc4bc size: 3239
+✔ Proposing infrastructure changes for stack hello-steampipe-test-dashboard
+- Creating the infrastructure for stack hello-steampipe-test-dashboard        [create complete]  [160.2s]
+  - Service discovery for your services to communicate within the VPC         [create complete]  [3.9s]
+  - Update your environment's shared resources                                [create complete]  [7.5s]
+  - An IAM role to update your environment stack                              [create complete]  [26.6s]
+  - An IAM Role for the Fargate agent to make AWS API calls on your behalf    [create complete]  [25.7s]
+  - A CloudWatch log group to hold your service logs                          [create complete]  [2.2s]
+  - An ECS service to run and maintain your tasks in the environment cluster  [create complete]  [78.1s]
+    Deployments
+               Revision  Rollout      Desired  Running  Failed  Pending
+      PRIMARY  4         [completed]  1        1        0       0
+  - An ECS task definition to group your containers and run them on ECS       [create complete]  [10.7s]
+  - An IAM role to control permissions for the containers in your tasks       [create complete]  [25.9s]
+✔ Deployed service dashboard.
+Recommended follow-up action:
+  - You can access your service at dashboard.test.hello-steampipe.local:8080 with service discovery.
+- Be a part of the Copilot ✨community✨!
+  Ask or answer a question, submit a feature request...
+  Visit 👉 https://aws.github.io/copilot-cli/community/get-involved/ to see how!
+```
