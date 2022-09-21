@@ -242,7 +242,7 @@ Recommended follow-up action:
 
 ```
 
-# 3 Deploy to ECS/Fargate (Backend Service)
+# #3 Deploy to ECS/Fargate (Backend Service)
 
 > 😊 this works with the website at http://dashboard.test.hello-steampipe.local:8080
 
