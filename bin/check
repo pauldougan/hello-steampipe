@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+echo "SHELL_LEVEL: $SHLVL"
+WIFI_NETWORK=$(osqueryi "select network_name from wifi_status where interface = 'en0'" --json | jq -r .[].network_name)
+echo "WIFI_NETWORK: $WIFI_NETWORK"
+echo "VPN: $(./bin/is_on_VPN)"
+echo "AWS_ACCOUNT: $AWS_VAULT"
+echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"

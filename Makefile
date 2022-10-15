@@ -10,6 +10,16 @@ NGINX_SERVICE_NAME        := mynginx3
 DOCKER_USER               := dougapd
 DIR                       := $(shell pwd)
 
+menu:
+	egrep -E "^[0-9]{2}" Makefile | gsed 's/://'
+
+status:
+	@copilot svc status -n dashboard
+	@copilot svc status -n nginx
+
+play:
+	@find casts -type f | sort | header -a "asciinema_cast" | vd -f csv | gsed 1d | xargs -n 1 asciinema play -s 4
+
 build:
 	docker build -t $(DASHBOARD_SERVICE_NAME) steampipe
 	docker build -t $(NGINX_SERVICE_NAME) nginx
@@ -65,10 +75,14 @@ docker-push:
 dashboard-run:
 	docker run --rm -ti -p 8080:8080 $(DASHBOARD_SERVICE_NAME)
 
+aws: aws-console aws-shell
+
 aws-console:
+	# check we are on the VPN else GDS CLI will fail
 	gds aws paas-experiments-admin -l
 
-aws-shell:
+aws-shell: 
+	# check we are on the VPN else GDS CLI will fail
 	$(ASSUME_ROLE) $(SHELL)
 
 deps:
@@ -102,3 +116,66 @@ aws-data:
 	steampipe query "select * from aws_ecs_container_instance" --output csv > data/ecs_container_instance.csv
 	steampipe query "select * from aws_ecr_repository" --output csv > data/ecr_repository.csv
 	steampipe query "select * from aws_ecr_image" --output csv > data/ecr_image.csv
+
+test:
+	@steampipe query "select * from aws_account" --output csv
+
+check_VPN:
+	@echo $(shell ./bin/is_on_VPN)
+
+warning:
+	$(warning this is just a warnin)
+
+info:
+	$(info this is informational only)
+
+error:
+	$(error this is an error boo)
+
+check:
+	bin/check
+
+01-app-init:
+	asciinema rec -c 'copilot app init hello-steampipe --resource-tags department=GDS,team=govuk-paas,owner=paul.dougan --domain experiments.cloudpipelineapps.digital' 		casts/01-app-init.cast
+	#asciinema rec -c 'copilot app init hello-steampipe --resource-tags department=GDS,team=govuk-paas,owner=paul.dougan,project=decommission' 	
+	#asciinema rec --append -c 'copilot app ls; copilot app show' 	casts/01-app-init.cast
+	
+02-env-init:
+	# add --region eu-west2
+	asciinema rec          -c 'copilot env init -n dev --container-insights' 		casts/02-env-init.cast
+	#asciinema rec --append -c 'copilot env init -n staging --container-insights' 	casts/02-env-init.cast
+	#asciinema rec --append -c 'copilot env init -n production --container-insights'	casts/02-env-init.cast
+	asciinema rec --append -c 'copilot env ls' 			casts/02-env-init.cast
+
+03-env-deploy:
+	asciinema rec          -c 'copilot env deploy -n dev' 		casts/03-env-deploy.cast
+	asciinema rec --append -c 'copilot env ls' 			casts/03-env-deploy.cast
+	asciinema rec --append -c 'copilot env show -n dev' 		casts/03-env-deploy.cast
+
+04-svc-init-dashboard:
+	asciinema rec          -c 'copilot svc init  -d steampipe/Dockerfile -n dashboard -t "Backend Service"' casts/04-svc-init-dashboard.cast
+	asciinema rec --append -c 'copilot svc ls' 			casts/04-svc-init-dashboard.cast
+	asciinema rec --append -c 'copilot svc show -n dashboard' 	casts/04-svc-init-dashboard.cast
+
+05-svc-deploy-dashboard:
+	asciinema rec          -c 'copilot svc deploy -e dev -n dashboard' casts/05-svc-deploy-dashboard.cast
+	asciinema rec --append -c 'copilot svc ls' 			casts/05-svc-deploy-dashboard.cast
+	asciinema rec --append -c 'copilot svc show -n dashboard'	casts/05-svc-deploy-dashboard.cast
+
+06-svc-init-nginx:
+	asciinema rec          -c 'copilot svc init -d nginx/Dockerfile.3 -n nginx -t "Load Balanced Web Service"' casts/06-svc-init-nginx.cast
+	asciinema rec --append -c 'copilot svc ls' 			casts/06-svc-init-nginx.cast
+	asciinema rec --append -c 'copilot svc show -n nginx' 		casts/06-svc-init-nginx.cast
+
+07-svc-deploy-nginx:
+	asciinema rec          -c 'copilot svc deploy -e dev -n nginx' casts/07-svc-deploy-nginx.cast
+	asciinema rec --append -c 'copilot svc ls' 			casts/07-svc-deploy-nginx.cast
+	asciinema rec --append -c 'copilot svc show -n nginx'		casts/07-svc-deploy-nginx.cast
+
+08-svc-delete-nginx:
+	asciinema rec          -c 'copilot svc delete -e dev -n nginx' casts/08-svc-delete-nginx.cast
+	
+09-app-delete:
+	asciinema rec          -c 'copilot app delete' casts/09-app-delete.cast
+
+0607: 06-svc-init-nginx 07-svc-deploy-nginx

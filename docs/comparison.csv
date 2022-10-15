@@ -1,0 +1,13 @@
+Cloud Foundry,Copilot,Kubernetes
+organization,app,cluster
+app,service,
+service,,
+domain,,
+route,,
+logdrain,,
+env variable,,
+n/a,secret,
+space,environment,namespace
+github action,pipeline,
+,addon,
+cf cli,copilot cli,kubectl cli

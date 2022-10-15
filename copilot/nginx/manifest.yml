@@ -12,12 +12,12 @@ http:
   # To match all requests you can use the "/" path.
   path: '/'
   # You can specify a custom health check path. The default is "/".
-  # healthcheck: '/'
+  healthcheck: '/health/'
 
 # Configuration for your containers and service.
 image:
   # Docker build arguments. For additional overrides: https://aws.github.io/copilot-cli/docs/manifest/lb-web-service/#image-build
-  build: nginx/Dockerfile
+  build: nginx/Dockerfile.3
   # Port exposed through your container to route traffic to it.
   port: 80
 
@@ -28,8 +28,8 @@ exec: true     # Enable running commands in your container.
 
 # Optional fields for more advanced use-cases.
 #
-#variables:                    # Pass environment variables as key value pairs.
-#  LOG_LEVEL: info
+variables:                    # Pass environment variables as key value pairs.
+  LOG_LEVEL: info
 
 #secrets:                      # Pass secrets from AWS Systems Manager (SSM) Parameter Store.
 #  GITHUB_TOKEN: GITHUB_TOKEN  # The key is the name of the environment variable, the value is the name of the SSM parameter.
