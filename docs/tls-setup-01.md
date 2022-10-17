@@ -4,6 +4,8 @@ a log of the first attempt to set up TLS for the deployed app (2022-10-14 17:00)
 
 ## 1. create app
 
+Prepare a `hello-steampipe` app to hold all the infrastructure and the apps.
+
 `copilot app init hello-steampipe --resource-tags department=GDS,team=govuk-paas,owner=paul.dougan --domain experiments.cloudpipelineapps.digital`
 
 > note the use of the --domain parameter which triggers the set up of TLS
@@ -35,6 +37,10 @@ Recommended follow-up action:
 
 ## 2. create 'dev' environment
 
+Configure a `dev` environment to develop in 
+
+`copilot env init -n dev --container-insights`
+
 ```
 Credential source: Enter temporary credentials
 AWS Access Key ID: ****************6V2Q
@@ -59,6 +65,9 @@ Recommended follow-up actions:
 
 ## 3. deploy 'dev' environment
 
+Deploy the `dev` environment and set up the infrastructure
+
+`copilot env deploy -n dev`
 ```
 ✔ Proposing infrastructure changes for the hello-steampipe-dev environment.
 - Creating the infrastructure for the hello-steampipe-dev environment.               [update rollback complete]  [851.1s]
