@@ -88,22 +88,17 @@ aws-shell:
 deps:
 	brew install aws/tap/copilot-cli
 	brew install steampipe
+	steampipe plugin install aws
+	steampipe plugin install csv
+	steampipe plugin install github
 
 pull:
 	docker pull nginx
 	docker pull turbot/steampipe
 
-frontend-run-noconfig:
-	@echo "http://localhost:8080"
-	docker run --name mynginx1 --rm -ti -p 8080:80 nginx
-
 frontend-run-mountconfig:
 	@echo "http://localhost:8081"
 	docker run --name mynginx2 -v $(DIR)/nginx/www:/usr/share/nginx/html -p 8081:80 nginx
-
-frontend-run-dockerized:
-	@echo "http://localhost:8082"
-	docker run --name mynginx3  -p 8082:80 mynginx3
 
 count-vpcs:
 	steampipe query "select count(*) from aws_vpc where region = 'eu-west-2'"
@@ -153,7 +148,7 @@ check:
 	asciinema rec --append -c 'copilot env show -n dev' 		casts/03-env-deploy.cast
 
 04-svc-init-dashboard:
-	asciinema rec          -c 'copilot svc init  -d steampipe/Dockerfile -n dashboard -t "Backend Service"' casts/04-svc-init-dashboard.cast
+	asciinema rec          -c 'copilot svc init  -d dashboard/Dockerfile -n dashboard -t "Backend Service"' casts/04-svc-init-dashboard.cast
 	asciinema rec --append -c 'copilot svc ls' 			casts/04-svc-init-dashboard.cast
 	asciinema rec --append -c 'copilot svc show -n dashboard' 	casts/04-svc-init-dashboard.cast
 
