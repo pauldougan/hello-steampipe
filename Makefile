@@ -1,7 +1,9 @@
+ASCIINEMA_REC             := asciinema rec --overwrite
+ASCIINEMA_APPEND          := asciinema rec --append
 AWS_PROFILE               := paas-experiments-admin
 GDS_CLI                   := gds
 ASSUME_ROLE               := $(GDS_CLI) aws $(AWS_PROFILE) --   
-DOMAIN                    := experiments.cloudpipeline.digital
+DOMAIN                    := govukpaasmigration.digital
 DRAWIO                    := /Applications/draw.io.app/Contents/MacOS/draw.io
 SHELL                     := bash
 APP_NAME                  := hello-steampipe
@@ -131,46 +133,42 @@ check:
 	bin/check
 
 01-app-init:
-	asciinema rec -c 'copilot app init hello-steampipe --resource-tags department=GDS,team=govuk-paas,owner=paul.dougan --domain experiments.cloudpipelineapps.digital' 		casts/01-app-init.cast
-	#asciinema rec -c 'copilot app init hello-steampipe --resource-tags department=GDS,team=govuk-paas,owner=paul.dougan,project=decommission' 	
-	#asciinema rec --append -c 'copilot app ls; copilot app show' 	casts/01-app-init.cast
+	$(ASCIINEMA_REC) -c 'copilot app init hello-steampipe --resource-tags department=GDS,team=govuk-paas,owner=paul.dougan --domain $(DOMAIN)' 		casts/$@.cast
 	
 02-env-init:
 	# add --region eu-west2
-	asciinema rec          -c 'copilot env init -n dev --container-insights' 		casts/02-env-init.cast
-	#asciinema rec --append -c 'copilot env init -n staging --container-insights' 	casts/02-env-init.cast
-	#asciinema rec --append -c 'copilot env init -n production --container-insights'	casts/02-env-init.cast
-	asciinema rec --append -c 'copilot env ls' 			casts/02-env-init.cast
+	$(ASCIINEMA_REC)     -c 'copilot env init -n dev --container-insights' 		casts/$@.cast
+	#$(ASCIINEMA_APPEND) -c 'copilot env init -n staging --container-insights' 	casts/$@.cast
+	#$(ASCIINEMA_APPEND) -c 'copilot env init -n production --container-insights'	casts/$@.cast
+	$(ASCIINEMA_APPEND)  -c 'copilot env ls' 			casts/$@.cast
 
 03-env-deploy:
-	asciinema rec          -c 'copilot env deploy -n dev' 		casts/03-env-deploy.cast
-	asciinema rec --append -c 'copilot env ls' 			casts/03-env-deploy.cast
-	asciinema rec --append -c 'copilot env show -n dev' 		casts/03-env-deploy.cast
+	$(ASCIINEMA_REC)    -c 'copilot env deploy -n dev' 		casts/$@.cast
+	$(ASCIINEMA_APPEND) -c 'copilot env ls' 				casts/$@.cast
+	$(ASCIINEMA_APPEND) -c 'copilot env show -n dev' 		casts/$@.cast
 
 04-svc-init-dashboard:
-	asciinema rec          -c 'copilot svc init  -d dashboard/Dockerfile -n dashboard -t "Backend Service"' casts/04-svc-init-dashboard.cast
-	asciinema rec --append -c 'copilot svc ls' 			casts/04-svc-init-dashboard.cast
-	asciinema rec --append -c 'copilot svc show -n dashboard' 	casts/04-svc-init-dashboard.cast
+	$(ASCIINEMA_REC)    -c 'copilot svc init  -d dashboard/Dockerfile -n dashboard -t "Backend Service"' casts/$@.cast
+	$(ASCIINEMA_APPEND) -c 'copilot svc ls' 				casts/$@.cast
+	$(ASCIINEMA_APPEND) -c 'copilot svc show -n dashboard' 	casts/$@.cast
 
 05-svc-deploy-dashboard:
-	asciinema rec          -c 'copilot svc deploy -e dev -n dashboard' casts/05-svc-deploy-dashboard.cast
-	asciinema rec --append -c 'copilot svc ls' 			casts/05-svc-deploy-dashboard.cast
-	asciinema rec --append -c 'copilot svc show -n dashboard'	casts/05-svc-deploy-dashboard.cast
+	$(ASCIINEMA_REC)    -c 'copilot svc deploy -e dev -n dashboard' casts/05-svc-deploy-dashboard.cast
+	$(ASCIINEMA_APPEND) -c 'copilot svc ls' 				casts/$@.cast
+	$(ASCIINEMA_APPEND) -c 'copilot svc show -n dashboard'	casts/$@.cast
 
 06-svc-init-nginx:
-	asciinema rec          -c 'copilot svc init -d nginx/Dockerfile.3 -n nginx -t "Load Balanced Web Service"' casts/06-svc-init-nginx.cast
-	asciinema rec --append -c 'copilot svc ls' 			casts/06-svc-init-nginx.cast
-	asciinema rec --append -c 'copilot svc show -n nginx' 		casts/06-svc-init-nginx.cast
+	$(ASCIINEMA_REC)    -c 'copilot svc init -d nginx/Dockerfile.3 -n nginx -t "Load Balanced Web Service"' casts/$@.cast
+	$(ASCIINEMA_APPEND) -c 'copilot svc ls' 				casts/$@.cast
+	$(ASCIINEMA_APPEND) -c 'copilot svc show -n nginx' 		casts/$@.cast
 
 07-svc-deploy-nginx:
-	asciinema rec          -c 'copilot svc deploy -e dev -n nginx' casts/07-svc-deploy-nginx.cast
-	asciinema rec --append -c 'copilot svc ls' 			casts/07-svc-deploy-nginx.cast
-	asciinema rec --append -c 'copilot svc show -n nginx'		casts/07-svc-deploy-nginx.cast
+	$(ASCIINEMA_REC)    -c 'copilot svc deploy -e dev -n nginx' casts/$@.cast
+	$(ASCIINEMA_APPEND) -c 'copilot svc ls' 				casts/$@.cast
+	$(ASCIINEMA_APPEND) -c 'copilot svc show -n nginx'		casts/$@.cast
 
 08-svc-delete-nginx:
-	asciinema rec          -c 'copilot svc delete -e dev -n nginx' casts/08-svc-delete-nginx.cast
+	$(ASCIINEMA_REC)    -c 'copilot svc delete -e dev -n nginx' casts/$@.cast
 	
 09-app-delete:
-	asciinema rec          -c 'copilot app delete' casts/09-app-delete.cast
-
-0607: 06-svc-init-nginx 07-svc-deploy-nginx
+	$(ASCIINEMA_REC)    -c 'copilot app delete' casts/$@.cast
