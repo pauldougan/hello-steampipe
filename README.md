@@ -1,8 +1,10 @@
 # hello-steampipe
 
-![](docs/screenshot.png)
+[![](docs/screenshot.png)](https://nginx.dev.hello-steampipe.govukpaasmigration.digital/)
 
 run a minimal [Steampipe](https://steampipe.io) dashboard on AWS using [AWS Copilot CLI](https://aws.github.io/copilot-cli/) to explore our options for deployment
+
+👉 https://nginx.dev.hello-steampipe.govukpaasmigration.digital
 
 # Deployment options
 
@@ -38,7 +40,7 @@ copilot svc deploy -e dev -n dashboard
 # configure front end nginx 
 copilot svc init -d nginx/Dockerfile -n nginx -t "Load Balanced Web Service"
 
-# deploy feont end nginx
+# deploy front end nginx reverse proxy
 copilot svc deploy -e dev -n nginx
 
 # check service 
