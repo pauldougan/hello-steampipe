@@ -57,11 +57,11 @@ copilot svc logs -n dashboard
 
 # Screencasts
 
-- [01-app-init](docs/images/01-app-init)
-- [02-env-init](docs/images/02-env-init)
-- [03-env-deploy](docs/images/03-env-deploy)
-- [04-svc-init-dashboard](docs/images/04-svc-init-dashboard)
-- [05-svc-deploy-dashboard](docs/images/05-svc-deploy-dashboard)
-- [06-svc-init-nginx](docs/images/06-svc-init-nginx)
-- [07-svc-deploy-nginx](docs/images/07-svc-deploy-nginx)
+- [01-app-init](docs/images/01-app-init.gif)
+- [02-env-init](docs/images/02-env-init.gif)
+- [03-env-deploy](docs/images/03-env-deploy.gif)
+- [04-svc-init-dashboard](docs/images/04-svc-init-dashboard.gif)
+- [05-svc-deploy-dashboard](docs/images/05-svc-deploy-dashboard.gif)
+- [06-svc-init-nginx](docs/images/06-svc-init-nginx.gif)
+- [07-svc-deploy-nginx](docs/images/07-svc-deploy-nginx.gif)
 
