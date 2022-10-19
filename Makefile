@@ -6,11 +6,16 @@ ASSUME_ROLE               := $(GDS_CLI) aws $(AWS_PROFILE) --
 DOMAIN                    := govukpaasmigration.digital
 DRAWIO                    := /Applications/draw.io.app/Contents/MacOS/draw.io
 SHELL                     := bash
-APP_NAME                  := hello-steampipe
+APP_NAME                  := pipe
 DASHBOARD_SERVICE_NAME    := dashboard
 NGINX_SERVICE_NAME        := mynginx3
 DOCKER_USER               := dougapd
 DIR                       := $(shell pwd)
+IS_ON_VPN                 := $(shell bin/is_on_VPN)
+
+define record_command
+$(ASCIINEMA_APPEND) -c $1 casts/$2.cast
+endef
 
 menu:
 	egrep -E "^[0-9]{2}" Makefile | gsed 's/://'
@@ -29,31 +34,6 @@ build:
 env:
 	$(ASSUME_ROLE) copilot env ls
 
-init-request-driven-web-service: Dockerfile
-	$(ASSUME_ROLE) \
-	copilot app init --app $(APP_NAME) \
-  	--name $(SERVICE_NAME) \
-  	--dockerfile "./Dockerfile" \
-	--port 8080 
-
-init-load-balanced-web-service: Dockerfile
-	$(ASSUME_ROLE) \
-	copilot init \
-	--app $(APP_NAME) \
-  	--name $(SERVICE_NAME) \
-  	--type "Load Balanced Web Service" \
-	--port 8080 \
-  	--dockerfile "./Dockerfile" 
-
-init-back-end-service: Dockerfile
-	$(ASSUME_ROLE) \
-	copilot init \
-	--app $(APP_NAME) \
-  	--name $(SERVICE_NAME) \
-  	--type "Backend Service" \
-	--port 8080 \
-  	--dockerfile "./Dockerfile" 
-
 edit-diagram: docs/steampipe-deploy.drawio.xml
 	$(DRAWIO) $^
 
@@ -65,12 +45,6 @@ docs/steampipe-deploy.svg: docs/steampipe-deploy.drawio.xml
 docs/steampipe-deploy.png: docs/steampipe-deploy.drawio.xml
 	$(DRAWIO) -x -e  -o $@ $<
  	
-deploy:
-	copilot deploy
-
-delete:
-	copilot app delete
-
 docker-push:
 	docker push $(DOCKER_USER)/$(DASHBOARD_SERVICE_NAME )
 
@@ -80,12 +54,12 @@ dashboard-run:
 aws: aws-console aws-shell
 
 aws-console:
-	# check we are on the VPN else GDS CLI will fail
+	# if not on VPN throw error
 	gds aws paas-experiments-admin -l
 
 aws-shell: 
-	# check we are on the VPN else GDS CLI will fail
-	$(ASSUME_ROLE) $(SHELL)
+	# if not on VPN throw error
+	$(ASSUME_ROLE) $(SHELL) -l
 
 deps:
 	brew install aws/tap/copilot-cli
@@ -114,61 +88,51 @@ aws-data:
 	steampipe query "select * from aws_ecr_repository" --output csv > data/ecr_repository.csv
 	steampipe query "select * from aws_ecr_image" --output csv > data/ecr_image.csv
 
-test:
-	@steampipe query "select * from aws_account" --output csv
-
-check_VPN:
-	@echo $(shell ./bin/is_on_VPN)
-
-warning:
-	$(warning this is just a warnin)
-
-info:
-	$(info this is informational only)
-
-error:
-	$(error this is an error boo)
-
-check:
-	bin/check
-
 01-app-init:
-	$(ASCIINEMA_REC) -c 'copilot app init hello-steampipe --resource-tags department=GDS,team=govuk-paas,owner=paul.dougan --domain $(DOMAIN)' 		casts/$@.cast
+	$(ASCIINEMA_REC) -c 'copilot app init $(APP_NAME) --resource-tags department=GDS,team=govuk-paas,owner=paul.dougan --domain $(DOMAIN)' 		casts/$@.cast
 	
 02-env-init:
-	# add --region eu-west2
-	$(ASCIINEMA_REC)     -c 'copilot env init -n dev --container-insights' 		casts/$@.cast
-	#$(ASCIINEMA_APPEND) -c 'copilot env init -n staging --container-insights' 	casts/$@.cast
-	#$(ASCIINEMA_APPEND) -c 'copilot env init -n production --container-insights'	casts/$@.cast
-	$(ASCIINEMA_APPEND)  -c 'copilot env ls' 			casts/$@.cast
+	$(ASCIINEMA_REC)     -c 'copilot env init -a $(APP_NAME) -n dev --container-insights' 		casts/$@.cast
 
 03-env-deploy:
-	$(ASCIINEMA_REC)    -c 'copilot env deploy -n dev' 		casts/$@.cast
-	$(ASCIINEMA_APPEND) -c 'copilot env ls' 				casts/$@.cast
-	$(ASCIINEMA_APPEND) -c 'copilot env show -n dev' 		casts/$@.cast
+	$(ASCIINEMA_REC)    -c 'copilot env deploy -a $(APP_NAME) -n dev' 		casts/$@.cast
 
 04-svc-init-dashboard:
-	$(ASCIINEMA_REC)    -c 'copilot svc init  -d dashboard/Dockerfile -n dashboard -t "Backend Service"' casts/$@.cast
-	$(ASCIINEMA_APPEND) -c 'copilot svc ls' 				casts/$@.cast
-	$(ASCIINEMA_APPEND) -c 'copilot svc show -n dashboard' 	casts/$@.cast
+	$(ASCIINEMA_REC)    -c 'copilot svc init  -d dashboard/Dockerfile -a $(APP_NAME) -n dashboard -t "Backend Service"' casts/$@.cast
 
 05-svc-deploy-dashboard:
-	$(ASCIINEMA_REC)    -c 'copilot svc deploy -e dev -n dashboard' casts/05-svc-deploy-dashboard.cast
-	$(ASCIINEMA_APPEND) -c 'copilot svc ls' 				casts/$@.cast
-	$(ASCIINEMA_APPEND) -c 'copilot svc show -n dashboard'	casts/$@.cast
+	$(ASCIINEMA_REC)    -c 'copilot svc deploy -a $(APP_NAME) -e dev -n dashboard' casts/05-svc-deploy-dashboard.cast
 
 06-svc-init-nginx:
-	$(ASCIINEMA_REC)    -c 'copilot svc init -d nginx/Dockerfile.3 -n nginx -t "Load Balanced Web Service"' casts/$@.cast
-	$(ASCIINEMA_APPEND) -c 'copilot svc ls' 				casts/$@.cast
-	$(ASCIINEMA_APPEND) -c 'copilot svc show -n nginx' 		casts/$@.cast
+	$(ASCIINEMA_REC)    -c 'copilot svc init -d nginx/Dockerfile.3 -a $(APP_NAME) -n nginx -t "Load Balanced Web Service"' casts/$@.cast
 
 07-svc-deploy-nginx:
-	$(ASCIINEMA_REC)    -c 'copilot svc deploy -e dev -n nginx' casts/$@.cast
-	$(ASCIINEMA_APPEND) -c 'copilot svc ls' 				casts/$@.cast
-	$(ASCIINEMA_APPEND) -c 'copilot svc show -n nginx'		casts/$@.cast
-
-08-svc-delete-nginx:
-	$(ASCIINEMA_REC)    -c 'copilot svc delete -e dev -n nginx' casts/$@.cast
+	$(ASCIINEMA_REC)    -c 'copilot svc deploy -a $(APP_NAME) -e dev -n nginx' casts/$@.cast
 	
-09-app-delete:
-	$(ASCIINEMA_REC)    -c 'copilot app delete' casts/$@.cast
+08-document-app:
+	$(call record_command, "copilot app ls",$@)
+	$(call record_command, "copilot app show -n $(APP_NAME)",$@)
+	$(call record_command, "copilot env ls",$@)
+	$(call record_command, "copilot env show -a $(APP_NAME)" -n dev",$@)
+	$(call record_command, "copilot svc ls -a $(APP_NAME)",$@)
+	$(call record_command, "copilot svc show -a $(APP_NAME) -n dashboard ",$@)
+	$(call record_command, "copilot svc show -a $(APP_NAME) -n nginx ",$@)
+
+09-svc-delete-nginx:
+	$(ASCIINEMA_REC)    -c 'copilot svc delete -a $(APP_NAME) -e dev -n nginx' casts/$@.cast
+
+10-svc-delete-dashboard:
+	$(ASCIINEMA_REC)    -c 'copilot svc delete -a $(APP_NAME) -e dev -n dashboard' casts/$@.cast
+
+11-app-delete-app:
+	$(ASCIINEMA_REC)    -c 'copilot app delete -n $(APP_NAME)' casts/$@.cast
+
+
+create-environments: 	01-app-init 02-env-init 03-env-deploy
+deploy-all: 			deploy-dashboard deploy-nginx
+deploy-dashboard: 		04-svc-init-dashboard 05-svc-deploy-dashboard
+deploy-nginx: 			06-svc-init-nginx 07-svc-deploy-nginx
+delete-all: 			11-app-delete-app
+
+check_VPN:
+	@echo "VPN_status: $(IS_ON_VPN)"
