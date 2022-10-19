@@ -1,0 +1,4 @@
+{"version": 2, "width": 112, "height": 37, "timestamp": 1666102262, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}}
+[0.379256, "o", "hello-steampipe\r\npaas-dashboard\r\n"]
+[1.096488, "o", "\u001b[91m✘\u001b[0m get application pipe: couldn't find an application named pipe in account 994429068692 and region eu-west-1\r\n"]
+[1.418325, "o", "dev\r\n"]
