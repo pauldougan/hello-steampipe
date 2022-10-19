@@ -1,5 +1,6 @@
 .DS_Store
+.htpasswd
 _data
+*.bkp
 hack
 nginx/conf/.htpasswd
-
